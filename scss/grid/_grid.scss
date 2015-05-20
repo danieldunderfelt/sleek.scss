@@ -1,0 +1,103 @@
+* {
+  box-sizing: border-box;
+}
+
+$breakpoints: "tablet" 768px, "desktop" 1024px, "wide" 1280px;
+$max-width: 940px;
+
+@mixin clear {
+	&:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+@mixin r($value, $operator: "min-width", $query: 'screen') {
+	@media only #{$query} and (#{$operator}: #{$value}) {
+		@content;
+	}
+}
+
+@mixin bp($media-name) {
+
+
+	@if $media == mobile {
+		@include r($tablet - 1, "max-width") { @content; }
+	}
+	@else if $media == tablet {
+		@include r($tablet) { @content; }
+	}
+	@else if $media == desktop {
+		@include r($desktop) { @content; }
+	}
+	@else if $media == wide {
+		@include r($wide) { @content; }
+	}
+	@else {
+		@warn "Unsupported breakpoint supplied!";
+	}
+}
+
+@function get-width($bp-width, $width) {
+
+	@if $width == false {
+		@return 100%;
+	}
+
+	@if unit($width) == unit($bp-width) and $bp-width > $width {
+		@return $width;
+	}
+
+	@return 100%;
+}
+
+@function get-child-width($children, $width) {
+	@return $width / $children;
+}
+
+@mixin grid($bp-children, $outer: false, $center: false) {
+
+	@if $center {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	@if $outer {
+		max-width: $max-width;
+	}
+
+	width: 100%;
+	@include clear;
+
+	$i: 1;
+
+	@each $bp in $breakpoints {
+		$bp-val: nth($bp, 2);
+
+		@include r($bp-val) {
+			width: get-width($bp-val, $max-width);
+
+			> * {
+				width: get-child-width(nth($bp-children, $i), get-width($bp-val, $max-width));
+				float: left;
+			}
+		}
+
+		$i: $i + 1;
+	}
+}
+
+@mixin child($bp-children, $width-ratio) {
+	$i: 1;
+
+	@each $bp in $breakpoints {
+		$bp-val: nth($bp, 2);
+
+		@include r($bp-val) {
+			width: ($max-width / nth($bp-children, $i)) * nth($width-ratio, $i);
+		}
+
+		$i: $i + 1;
+	}
+}
