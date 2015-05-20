@@ -3,7 +3,7 @@
 }
 
 $zero-to-first: "mobile";
-$breakpoints: "tablet" 768px, "desktop" 1024px, "wide" 1280px;
+$breakpoints: $zero-to-first 0px, "tablet" 768px, "desktop" 1024px, "wide" 1280px;
 $max-width: 940px;
 
 @mixin clear {
@@ -23,7 +23,7 @@ $max-width: 940px;
 @mixin bp($media-name) {
 
 	@if $media-name == $zero-to-first {
-		@include r(nth(nth($breakpoints, 1), 2) - 1, "max-width") { @content; }
+		@include r(nth(nth($breakpoints, 2), 2) - 1, "max-width") { @content; }
 	}
 
 	@else {
@@ -41,9 +41,13 @@ $max-width: 940px;
 	}
 }
 
+@function prepend($list, $value) {
+	@return join($value, $list);
+}
+
 @function get-width($bp-width, $width) {
 
-	@if $width == false {
+	@if $width == false or $width == 0 {
 		@return 100%;
 	}
 
@@ -58,7 +62,7 @@ $max-width: 940px;
 	@return $width / $children;
 }
 
-@mixin grid($bp-children, $outer: false, $center: false) {
+@mixin sleek-grid($bp-children, $outer: false, $center: false) {
 
 	@if $center {
 		margin-left: auto;
@@ -75,13 +79,17 @@ $max-width: 940px;
 	$i: 1;
 
 	@each $bp in $breakpoints {
+		$bp-name: nth($bp, 1);
 		$bp-val: nth($bp, 2);
 
-		@include r($bp-val) {
-			width: get-width($bp-val, $max-width);
+		@include bp($bp-name) {
+
+			@if $outer {
+				width: get-width($bp-val, $max-width);
+			}
 
 			> * {
-				width: get-child-width(nth($bp-children, $i), get-width($bp-val, $max-width));
+				width: get-child-width(nth($bp-children, $i), 100%);
 				float: left;
 			}
 		}
@@ -97,7 +105,7 @@ $max-width: 940px;
 		$bp-val: nth($bp, 2);
 
 		@include r($bp-val) {
-			width: ($max-width / nth($bp-children, $i)) * nth($width-ratio, $i);
+			width: (100% / nth($bp-children, $i)) * nth($width-ratio, $i);
 		}
 
 		$i: $i + 1;
