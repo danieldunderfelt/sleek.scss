@@ -2,6 +2,7 @@
   box-sizing: border-box;
 }
 
+$zero-to-first: "mobile";
 $breakpoints: "tablet" 768px, "desktop" 1024px, "wide" 1280px;
 $max-width: 940px;
 
@@ -21,21 +22,22 @@ $max-width: 940px;
 
 @mixin bp($media-name) {
 
+	@if $media-name == $zero-to-first {
+		@include r(nth(nth($breakpoints, 1), 2) - 1, "max-width") { @content; }
+	}
 
-	@if $media == mobile {
-		@include r($tablet - 1, "max-width") { @content; }
-	}
-	@else if $media == tablet {
-		@include r($tablet) { @content; }
-	}
-	@else if $media == desktop {
-		@include r($desktop) { @content; }
-	}
-	@else if $media == wide {
-		@include r($wide) { @content; }
-	}
 	@else {
-		@warn "Unsupported breakpoint supplied!";
+
+		@each $bp in $breakpoints {
+			$bp-name: nth($bp, 1);
+			$bp-val: nth($bp, 2);
+
+			@if $bp-name == $media-name {
+				@include r($bp-val) {
+					@content;
+				}
+			}
+		}
 	}
 }
 
