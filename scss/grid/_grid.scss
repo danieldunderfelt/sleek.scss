@@ -100,8 +100,9 @@ $default-width: 940px !default;
 	}
 }
 
-@mixin sleek-outer($width: $default-width, $center: false) {
+@mixin sleek-outer($center: true, $width: $default-width) {
 
+	width: 100%;
 	max-width: $width;
 
 	@if $center {
