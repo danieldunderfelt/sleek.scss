@@ -13,7 +13,7 @@ For now, copypaste the Scss from the `_grid` folder in this repo. I'll add Sleek
 
 ## How to use
 
-Sleek uses only Sass mixins. There's no grid .classes in sight! In fact, feel free to use any class names you want for your elements. There will never be class names in Sleek.
+Sleek uses only Sass mixins. There are no grid .classes in sight! In fact, feel free to use any class names you want for your elements. There will never be class names in Sleek.
 
 ### Configuration
 
