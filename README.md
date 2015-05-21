@@ -40,7 +40,7 @@ Sleek does it's thing with three mixins: `sleek`, `sleek-outer` and `sleek-child
 
 ```
 
-That's right! You don't use the mixin inside a selector block, you supply the selector you want the grid to apply to to the mixin! Soviet Russia etc. And yes, you can supply any kind of selector. It'll get interpolated straight into a selector block.
+That's right! You don't use the mixin inside a selector block, you supply the selector you want the grid to apply to to the mixin! Soviet Russia etc. And yes, you can supply any kind of selector. It'll get interpolated straight into a selector rule.
 
 The second argument is a Sass-list of how many children should fit side-by-side inside the element on each breakpoint. It goes from mobile to wide. This order is important, and the order you specify the breakpoints is equally as important, as this is a 1:1 map. So on mobile, each child is 100% wide. During the tablet breakpoint, the children are 50% wide and two fit side-by-side and so on.
 
@@ -48,7 +48,7 @@ Be aware that you may skip all but one breakpoint rule in the list. If you suppl
 
 ### Weighing children
 
-So you want to be a rebel and make one child larger than the others? No problem, you can just use the `sleek-child` mixin! it has the same signature as the `sleek` mixin but the list of numbers mean something different. Let's have a look:
+So you want to be a rebel and make one child larger than the others? No problem, you can just use the `sleek-child` mixin! It has the same signature as the `sleek` mixin but the list of numbers mean something different. Let's have a look:
 
 ```
 
