@@ -2,8 +2,7 @@
   box-sizing: border-box;
 }
 
-$zero-to-first: "mobile";
-$breakpoints: $zero-to-first 0px, "tablet" 768px, "desktop" 1024px, "wide" 1280px;
+$breakpoints: "mobile" 0px, "tablet" 768px, "desktop" 1024px, "wide" 1280px;
 $max-width: 940px;
 
 @mixin clear {
@@ -22,7 +21,7 @@ $max-width: 940px;
 
 @mixin bp($media-name) {
 
-	@if $media-name == $zero-to-first {
+	@if $media-name == nth(nth($breakpoints, 1), 1) {
 		@include r(nth(nth($breakpoints, 2), 2) - 1, "max-width") { @content; }
 	}
 
