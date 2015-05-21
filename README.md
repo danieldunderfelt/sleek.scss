@@ -1,4 +1,4 @@
-# sleek.scss
+# sleek.scss v. 0.1.0
 A new twist on the grid system. Who needs columns?? No one! With this, you just tell your containing element how many children should fit next to each other at a given breakpoint.
 
 No columns in sight.
@@ -6,6 +6,10 @@ No columns in sight.
 Fundamentally, all this grid system does is set widths and float: left. You are responsible for gutters and other adjustments. Since the grid system is kept very simple on purpose, just tweak the numbers until you have something you like.
 
 All units are supported for widths and breakpoints. The default base-width is set at 940px, which seems a popular choice, but you are free to set a percentage width as well. If you use em's, be sure to assign both the breakpoints and the max-width in em's.
+
+## Installing
+
+For now, copypaste the Scss from the `_grid` folder in this repo. I'll add Sleek to various package managers in the future.
 
 ## How to use
 
