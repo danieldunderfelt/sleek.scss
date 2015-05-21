@@ -2,8 +2,10 @@
   box-sizing: border-box;
 }
 
-$breakpoints: "mobile" 0px, "tablet" 768px, "desktop" 1024px, "wide" 1280px;
-$max-width: 940px;
+$breakpoints: "mobile" 0px, "tablet" 768px, "desktop" 1024px, "wide" 1280px !default;
+$default-width: 940px !default;
+
+// Internal from here on out
 
 @mixin clear {
 	&:after {
@@ -61,52 +63,96 @@ $max-width: 940px;
 	@return $width / $children;
 }
 
-@mixin sleek-grid($bp-children, $outer: false, $center: false) {
+@mixin sleek($selector, $bp-children) {
+	$element-children: $bp-children !global;
+	$last-val: 1;
+
+	#{$selector} {
+		@include clear;
+
+		$i: 1;
+
+		@each $bp in $breakpoints {
+			$bp-name: nth($bp, 1);
+			$bp-val: nth($bp, 2);
+
+			@if $i > length($bp-children) {
+				$child-space: $last-val;
+			}
+			@else {
+				$child-space: nth($bp-children, $i);
+			}
+
+			@include bp($bp-name) {
+
+				> * {
+					width: get-child-width($child-space, 100%);
+					float: left;
+				}
+			}
+
+			$last-val: $child-space;
+
+			$i: $i + 1;
+		}
+
+		@content;
+	}
+}
+
+@mixin sleek-outer($width: $default-width, $center: false) {
+
+	max-width: $width;
 
 	@if $center {
 		margin-left: auto;
 		margin-right: auto;
 	}
 
-	@if $outer {
-		max-width: $max-width;
-	}
-
-	width: 100%;
-	@include clear;
-
-	$i: 1;
-
 	@each $bp in $breakpoints {
 		$bp-name: nth($bp, 1);
 		$bp-val: nth($bp, 2);
 
 		@include bp($bp-name) {
-
-			@if $outer {
-				width: get-width($bp-val, $max-width);
-			}
-
-			> * {
-				width: get-child-width(nth($bp-children, $i), 100%);
-				float: left;
-			}
+			width: get-width($bp-val, $width);
 		}
-
-		$i: $i + 1;
 	}
 }
 
-@mixin child($bp-children, $width-ratio) {
-	$i: 1;
+@mixin sleek-child($selector, $bp-weight) {
+	$bp-children: $element-children;
+	$last-val-child: 1;
+	$last-val-weight: 1;
 
-	@each $bp in $breakpoints {
-		$bp-val: nth($bp, 2);
+	#{$selector} {
+		$i: 1;
 
-		@include r($bp-val) {
-			width: (100% / nth($bp-children, $i)) * nth($width-ratio, $i);
+		@each $bp in $breakpoints {
+			$bp-name: nth($bp, 1);
+			$bp-val: nth($bp, 2);
+
+			@if $i > length($bp-children) {
+				$child-space: $last-val-child;
+			}
+			@else {
+				$child-space: nth($bp-children, $i);
+			}
+
+			@if $i > length($bp-weight) {
+				$child-weight: $last-val-weight;
+			}
+			@else {
+				$child-weight: nth($bp-weight, $i);
+			}
+
+			@include bp($bp-name) {
+				width: (100% / $child-space) * $child-weight;
+			}
+
+			$last-val-child: $child-space;
+			$last-val-weight: $child-weight;
+
+			$i: $i + 1;
 		}
-
-		$i: $i + 1;
 	}
 }
